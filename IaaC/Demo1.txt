@@ -1,0 +1,24 @@
+#Define the provider
+provider "aws" {
+    region = "ap-southeasr-1"
+}
+
+#Create a vertual network
+resource "aws_vpc" "my_vpc" {
+    cidr_block = "10.0.0.0/16"
+    tags = {
+        Name = "My_VPC"
+    }
+}
+
+#Create your application segment
+resource "aws_subnet" "my_app-subnet" {
+    cidr_block = "10.0.0.0/16"
+    tags = {
+        Name = "APP_Subnet"
+    }
+    vpc_id = aws_vpc.my_vpc.id
+    cidr_block = "10.0.1.0/24"
+    map_public_ip_on_launch = true
+    depends_on = [aws_vps.my_vpc]
+}

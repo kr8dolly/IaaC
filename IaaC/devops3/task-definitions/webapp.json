@@ -1,0 +1,44 @@
+[
+    {
+        "name": "webapp",
+        "image": "wordpress",
+        "cpu": 512,
+        "memory": 300,
+        "essential": true,
+        "portMappings": [
+            {
+                "hostPort": 80,
+                "containerPort": 80,
+                "protocol": "tcp"
+            }
+        ],
+        "environment": [
+            {
+                "name": "WORDPRESS_DB_HOST",
+                "value": "${database_host}"
+            },
+            {
+                "name": "WORDPRESS_DB_NAME",
+                "value": "${database_name}"
+            },
+            {
+                "name": "WORDPRESS_DB_USER",
+                "value": "${database_user}"
+            },
+            {
+                "name": "WORDPRESS_DB_PASSWORD",
+                "value": "${database_password}"
+            }
+        ]
+    },
+    {
+        "name": "zap",
+        "image": "owasp/zap2docker-live",
+        "cpu": 512,
+        "memory": 300,
+        "essential": true,
+        "links": ["webapp"],
+        "entrypoint": ["zap-x.sh"],
+        "command": ["-daemon -quickurl http://webapp"]
+    }
+]
